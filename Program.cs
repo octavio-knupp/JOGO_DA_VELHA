@@ -1,7 +1,7 @@
 ﻿using System;
 
 class Program
-{
+{       
     static void Main()
     {
         int opcaoMenu;
@@ -36,11 +36,13 @@ class Program
                     {
                         Console.WriteLine("Iniciando modo: Jogador vs Jogador...");
                         // Aqui depois colocamos a lógica do JxJ
+                        InicializarTabuleiro();
                     }
                     else if (modoJogo == 2)
                     {
                         Console.WriteLine("Iniciando modo: Jogador vs Máquina...");
                         // Aqui depois colocamos a lógica do JxM
+                        InicializarTabuleiro();
                     }
                     else
                     {
@@ -70,5 +72,34 @@ class Program
             }
 
         } while (opcaoMenu != 3);
+    }
+    static void InicializarTabuleiro()
+    {
+       //Alimentando a matriz.
+       Console.Clear();
+        string[,] tabuleiro = new string[3, 3];
+        //primeiro for para fazer as linhas
+        for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
+        {
+            //segundo for para fazer as colunas
+            for ( int coluna =0; coluna < tabuleiro.GetLength(1); coluna++)
+            {
+                tabuleiro[linha , coluna]= " 0 ";
+            }
+        
+        }
+
+        //mostrando o tabuleiro na tela
+        for(int linha= 0; linha < tabuleiro.GetLength(0); linha++)
+        {
+           for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
+            {
+                Console.Write($"{tabuleiro[linha , coluna]}");
+                if (coluna < 2) Console.Write("|");
+            }
+            Console.WriteLine();
+            if (linha < 2) Console.WriteLine("---+---+---");
+        }
+        Console.ReadLine();
     }
 }
