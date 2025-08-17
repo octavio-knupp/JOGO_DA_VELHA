@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 class Program
 {
@@ -37,7 +37,11 @@ class Program
                     if (modoJogo == 1)
                     {
                         Console.WriteLine("Iniciando modo: Jogador vs Jogador...");
-                        InicializarTabuleiro();
+                        Placar(modoJogo);
+
+                        //depois vamos colocar a lógica do JxJ
+                        InicializarTabuleiro(modoJogo);
+
                         string jogadorX = "X";
                         string jogadorO = "O";
                         int tentativas = 0;
@@ -51,8 +55,10 @@ class Program
                     else if (modoJogo == 2)
                     {
                         Console.WriteLine("Iniciando modo: Jogador vs Máquina...");
-                        InicializarTabuleiro();
+                        Placar(modoJogo);
+
                         // Aqui depois você adiciona a lógica do JxM
+                        InicializarTabuleiro(modoJogo);                       
                     }
                     else
                     {
@@ -84,12 +90,33 @@ class Program
         } while (opcaoMenu != 3);
     }
 
-    static void InicializarTabuleiro()
+    static void Placar(int modoJogo)
     {
-        // Alimentando a matriz.
+        int vitoriaJogador1 = 0;
+        int vitoriaJogador2 = 0;
+        int vitoriaMaquina = 0;
+
+        if (modoJogo == 1)
+        {
+            //Placar Jogador VS Joador
+            Console.WriteLine($"Placar:  Jogador 1:{vitoriaJogador1} | Jogador 2: {vitoriaJogador2}");
+            Console.WriteLine();
+        }
+
+        else if (modoJogo == 2)
+        {
+            //Placar Jogador VS Máquina
+            Console.WriteLine($"Placar: Jogador 1: {vitoriaJogador1} | Máquina: {vitoriaMaquina}");
+            Console.WriteLine();
+        }
+    }
+
+    static void InicializarTabuleiro(int modoJogo)
+    {
         Console.Clear();
-        Console.WriteLine("Ganha o jogador que fizer:");
-        Console.WriteLine("3 em linha (horizontal, vertical ou diagonal).");
+        Placar(modoJogo);
+
+        // Alimentando a matriz.
 
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
