@@ -39,18 +39,9 @@ class Program
                         CentralizarTexto("Iniciando modo: Jogador vs Jogador...");
                         Placar(modoJogo);
 
-                        //depois vamos colocar a lógica do JxJ
+                        // depois vamos colocar a lógica do JxJ
                         InicializarTabuleiro(modoJogo);
-
-                        string jogadorX = "X";
-                        string jogadorO = "O";
-                        int tentativas = 0;
-
-                        while (tentativas < 9)
-                        {
-                            // Aqui depois você adiciona a lógica do JxJ
-                            tentativas++;
-                        }
+                        Jogarjxj(modoJogo);
                     }
                     else if (modoJogo == 2)
                     {
@@ -90,6 +81,53 @@ class Program
         } while (opcaoMenu != 3);
     }
 
+    static void Jogarjxj(int modoJogo)
+    {
+        string jogadorAtual = "X";
+        int tentativas = 0;
+
+        InicializarTabuleiro(modoJogo);
+
+        while (tentativas < 9)
+        {
+            Console.Clear();
+            Placar(modoJogo);
+            MostrarTabuleiro();
+
+            CentralizarTexto($"Vez do jogador {jogadorAtual}");
+            CentralizarTexto("Digite a linha (1-3): ");
+            int linha = int.Parse(Console.ReadLine()) - 1;
+
+            CentralizarTexto("Digite a coluna (1-3): ");
+            int coluna = int.Parse(Console.ReadLine()) - 1;
+
+            // Verifica se a posição está disponível
+            if (tabuleiro[linha, coluna] == " 0 ")
+            {
+                tabuleiro[linha, coluna] = $" {jogadorAtual} ";
+                tentativas++;
+
+                // Verifica vitória
+                if (VerificarVencedor(jogadorAtual))
+                {
+                    Console.Clear();
+                    MostrarTabuleiro();
+                    CentralizarTexto($"Jogador {jogadorAtual} venceu!");
+                    Console.ReadKey();
+                    return;
+                }
+
+                // Troca o jogador
+                jogadorAtual = (jogadorAtual == "X") ? "O" : "X";
+            }
+            else
+            {
+                CentralizarTexto("Posição já ocupada! Tente novamente.");
+                Console.ReadKey();
+            }
+        }
+    }
+
     static void Placar(int modoJogo)
     {
         int vitoriaJogador1 = 0;
@@ -98,14 +136,13 @@ class Program
 
         if (modoJogo == 1)
         {
-            //Placar Jogador VS Joador
-            CentralizarTexto($"Placar:  Jogador 1:{vitoriaJogador1} | Jogador 2: {vitoriaJogador2}");
+            // Placar Jogador VS Jogador
+            CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Jogador 2: {vitoriaJogador2}");
             Console.WriteLine();
         }
-
         else if (modoJogo == 2)
         {
-            //Placar Jogador VS Máquina
+            // Placar Jogador VS Máquina
             CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Máquina: {vitoriaMaquina}");
             Console.WriteLine();
         }
@@ -116,8 +153,7 @@ class Program
         Console.Clear();
         Placar(modoJogo);
 
-        // Alimentando a matriz.
-
+        // Alimentando a matriz
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
             for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
@@ -125,7 +161,10 @@ class Program
                 tabuleiro[linha, coluna] = " 0 "; // casa vazia
             }
         }
+    }
 
+    static void MostrarTabuleiro()
+    {
         // mostrando o tabuleiro na tela
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
@@ -143,11 +182,17 @@ class Program
     }
 
     static void CentralizarTexto(string texto)
-        {
-            int larguraConsole = Console.WindowWidth;
-            int posicaoInicial = Math.Max(0, (larguraConsole - texto.Length) / 2);
+    {
+        int larguraConsole = Console.WindowWidth;
+        int posicaoInicial = Math.Max(0, (larguraConsole - texto.Length) / 2);
 
-            Console.SetCursorPosition(posicaoInicial, Console.CursorTop);
-            Console.WriteLine(texto);
-        }
+        Console.SetCursorPosition(posicaoInicial, Console.CursorTop);
+        Console.WriteLine(texto);
     }
+
+    static bool VerificarVencedor(string jogador)
+    {
+        // Ainda vazio, retorna false para não quebrar o código
+        return false;
+    }
+}
