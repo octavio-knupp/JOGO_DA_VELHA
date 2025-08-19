@@ -12,6 +12,7 @@ class Program
         do
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             CentralizarTexto("=== JOGO DA VELHA ===");
             CentralizarTexto("1 - Jogar");
             CentralizarTexto("2 - Instruções");
@@ -102,7 +103,7 @@ class Program
             int coluna = int.Parse(Console.ReadLine()) - 1;
 
             // Verifica se a posição está disponível
-            if (tabuleiro[linha, coluna] == " 0 ")
+            if (tabuleiro[linha, coluna] == "   ")
             {
                 tabuleiro[linha, coluna] = $" {jogadorAtual} ";
                 tentativas++;
@@ -143,6 +144,7 @@ class Program
         else if (modoJogo == 2)
         {
             // Placar Jogador VS Máquina
+
             CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Máquina: {vitoriaMaquina}");
             Console.WriteLine();
         }
@@ -158,7 +160,7 @@ class Program
         {
             for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
             {
-                tabuleiro[linha, coluna] = " 0 "; // casa vazia
+                tabuleiro[linha, coluna] = "   "; // casa vazia
             }
         }
     }
