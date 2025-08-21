@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data.Common;
+using System.Xml;
 
 class Program
 {
@@ -16,7 +18,8 @@ class Program
             CentralizarTexto("=== JOGO DA VELHA ===");
             CentralizarTexto("1 - Jogar");
             CentralizarTexto("2 - Instruções");
-            CentralizarTexto("3 - Sair");
+            CentralizarTexto("3 - Ranking");
+            CentralizarTexto("4 - Sair");
             CentralizarTexto("Escolha uma opção: ");
 
             if (!int.TryParse(Console.ReadLine(), out opcaoMenu))
@@ -25,7 +28,6 @@ class Program
             switch (opcaoMenu)
             {
                 case 1:
-                    // Escolher modo de jogo
                     Console.Clear();
                     CentralizarTexto("Escolha o modo de jogo:");
                     CentralizarTexto("1 - Jogador vs Jogador");
@@ -39,8 +41,6 @@ class Program
                     {
                         CentralizarTexto("Iniciando modo: Jogador vs Jogador...");
                         Placar(modoJogo);
-
-                        // depois vamos colocar a lógica do JxJ
                         InicializarTabuleiro(modoJogo);
                         Jogarjxj(modoJogo);
                     }
@@ -48,8 +48,6 @@ class Program
                     {
                         CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
                         Placar(modoJogo);
-
-                        // Aqui depois você adiciona a lógica do JxM
                         InicializarTabuleiro(modoJogo);
                     }
                     else
@@ -70,6 +68,12 @@ class Program
                     break;
 
                 case 3:
+                    Console.Clear();
+                    MostrarRanking();
+                    Console.ReadKey();
+                    break;
+
+                case 4:
                     CentralizarTexto("Saindo do jogo...");
                     break;
 
@@ -79,7 +83,7 @@ class Program
                     break;
             }
 
-        } while (opcaoMenu != 3);
+        } while (opcaoMenu != 4);
     }
 
     static void Jogarjxj(int modoJogo)
@@ -102,13 +106,11 @@ class Program
             CentralizarTexto("Digite a coluna (1-3): ");
             int coluna = int.Parse(Console.ReadLine()) - 1;
 
-            // Verifica se a posição está disponível
             if (tabuleiro[linha, coluna] == "   ")
             {
                 tabuleiro[linha, coluna] = $" {jogadorAtual} ";
                 tentativas++;
 
-                // Verifica vitória
                 if (VerificarVencedor(jogadorAtual))
                 {
                     Console.Clear();
@@ -118,7 +120,6 @@ class Program
                     return;
                 }
 
-                // Troca o jogador
                 jogadorAtual = (jogadorAtual == "X") ? "O" : "X";
             }
             else
@@ -137,14 +138,11 @@ class Program
 
         if (modoJogo == 1)
         {
-            // Placar Jogador VS Jogador
             CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Jogador 2: {vitoriaJogador2}");
             Console.WriteLine();
         }
         else if (modoJogo == 2)
         {
-            // Placar Jogador VS Máquina
-
             CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Máquina: {vitoriaMaquina}");
             Console.WriteLine();
         }
@@ -155,19 +153,17 @@ class Program
         Console.Clear();
         Placar(modoJogo);
 
-        // Alimentando a matriz
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
             for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
             {
-                tabuleiro[linha, coluna] = "   "; // casa vazia
+                tabuleiro[linha, coluna] = "   ";
             }
         }
     }
 
     static void MostrarTabuleiro()
     {
-        // mostrando o tabuleiro na tela
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
             string linhaTabuleiro = "";
@@ -194,7 +190,45 @@ class Program
 
     static bool VerificarVencedor(string jogador)
     {
-        // Ainda vazio, retorna false para não quebrar o código
+        for (int linha = 0; linha < 3; linha++)
+        {
+            if (tabuleiro[linha, 0] == $" {jogador} " &&
+                tabuleiro[linha, 1] == $" {jogador} " &&
+                tabuleiro[linha, 2] == $" {jogador} ")
+            {
+                return true;
+            }
+        }
+
+        for (int coluna = 0; coluna < 3; coluna++)
+        {
+            if (tabuleiro[0, coluna] == $" {jogador} " &&
+                tabuleiro[1, coluna] == $" {jogador} " &&
+                tabuleiro[2, coluna] == $" {jogador} ")
+            {
+                return true;
+            }
+        }
+
+        if (tabuleiro[0, 0] == $" {jogador} " &&
+            tabuleiro[1, 1] == $" {jogador} " &&
+            tabuleiro[2, 2] == $" {jogador} ")
+        {
+            return true;
+        }
+
+        if (tabuleiro[0, 2] == $" {jogador} " &&
+            tabuleiro[1, 1] == $" {jogador} " &&
+            tabuleiro[2, 0] == $" {jogador} ")
+        {
+            return true;
+        }
+
         return false;
+    }
+
+    static void MostrarRanking()
+    {
+        // Função ainda vazia
     }
 }
