@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data.Common;
-using System.Xml;
-
-class Program
+﻿class Program
 {
     static string[,] tabuleiro = new string[3, 3]; // tabuleiro agora é global
 
@@ -47,8 +43,20 @@ class Program
                     else if (modoJogo == 2)
                     {
                         CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
+                        Console.Clear();
+                        CentralizarTexto("Escolha a dificuldade");
+                        CentralizarTexto("1 - Fácil");
+                        CentralizarTexto("2 - Médio");
+                        CentralizarTexto("3 - Difícil");
+                        CentralizarTexto("Digite sua escolha");
+                        int dificuldade;
+                        if (!int.TryParse(Console.ReadLine(), out dificuldade))
+                            dificuldade = 1;
+
+                        CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
+                        Jogarjxm(modoJogo, dificuldade);
                     }
                     else
                     {
@@ -128,6 +136,172 @@ class Program
                 Console.ReadKey();
             }
         }
+    }
+
+    static void Jogarjxm(int modoJogo, int dificuldade)
+    {
+        // Jogador homo Sapiens
+        string jogadorAtual = "X";
+        int tentativas = 0;
+        Random rnd = new Random();
+
+        Placar(modoJogo);
+        InicializarTabuleiro(modoJogo);
+
+        while (tentativas < 9)
+        {
+            Console.Clear();
+            Placar(modoJogo);
+            MostrarTabuleiro();
+
+            if (jogadorAtual == "X")
+            {
+                // Jogador homo
+                CentralizarTexto("Sua vez (Jogador X)");
+                CentralizarTexto("Digite a linha (1-3): ");
+                int linha = int.Parse(Console.ReadLine()) - 1;
+
+                CentralizarTexto("Digite a coluna (1-3): ");
+                int coluna = int.Parse(Console.ReadLine()) - 1;
+
+                if (tabuleiro[linha, coluna] == "   ")
+                {
+                    tabuleiro[linha, coluna] = $" {jogadorAtual} ";
+                    tentativas++;
+                }
+                else
+                {
+                    CentralizarTexto("Posição já ocupada! Tente novamente.");
+                    Console.ReadKey();
+                    continue;
+                }
+            }
+            else
+            {
+                // Jogada da máquina
+                CentralizarTexto("Vez da Máquina (O)");
+                int linha, coluna;
+
+                // FÁCIL
+                if (dificuldade == 1)
+                {
+                    do
+                    {
+                        linha = rnd.Next(0, 3);
+                        coluna = rnd.Next(0, 3);
+                    } while (tabuleiro[linha, coluna] != "   ");
+                }
+                // MÉDIO
+                else if (dificuldade == 2)
+                {
+                    // tenta ganhar
+                    if (!TentarJogar("O", out linha, out coluna))
+                    {
+                        do
+                        {
+                            linha = rnd.Next(0, 3);
+                            coluna = rnd.Next(0, 3);
+                        } while (tabuleiro[linha, coluna] != "   ");
+                    }
+                }
+
+
+                // DIFÍCIL
+                else
+                {
+                    // tenta ganhar
+                    if (!TentarJogar("O", out linha, out coluna))
+                    {
+                        // tenta bloquear
+                        if (!TentarJogar("X", out linha, out coluna))
+                        {
+                            // Senão, pega centro ou canto
+                            if (tabuleiro[1, 1] == "   ")
+                            {
+                                linha = 1; coluna = 1;
+                            }
+                            else
+                            {
+                                // FIX: usar new int[,] e laço for para matriz 2D
+                                int[,] cantos = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } }; // FIX
+                                bool jogou = false;
+
+                                for (int i = 0; i < cantos.GetLength(0); i++) // FIX
+                                {
+                                    int lc = cantos[i, 0];
+                                    int cc = cantos[i, 1];
+                                    if (tabuleiro[lc, cc] == "   ")
+                                    {
+                                        linha = lc;
+                                        coluna = cc;
+                                        jogou = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!jogou)
+                                {
+                                    do
+                                    {
+                                        linha = rnd.Next(0, 3);
+                                        coluna = rnd.Next(0, 3);
+                                    } while (tabuleiro[linha, coluna] != "   ");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                tabuleiro[linha, coluna] = $" {jogadorAtual} ";
+                tentativas++;
+            }
+
+            // Verifica vencedor
+            if (VerificarVencedor(jogadorAtual))
+            {
+                Console.Clear();
+                MostrarTabuleiro();
+                if (jogadorAtual == "X")
+                    CentralizarTexto("Você venceu!");
+                else
+                    CentralizarTexto("A máquina venceu!");
+                Console.ReadKey();
+                return;
+            }
+
+            jogadorAtual = (jogadorAtual == "X") ? "O" : "X";
+        }
+
+        Console.Clear();
+        MostrarTabuleiro();
+        CentralizarTexto("Deu velha! Empate.");
+        Console.ReadKey();
+    }
+
+    static bool TentarJogar(string jogador, out int linhaEscolhida, out int colunaEscolhida)
+    {
+        for (int linha = 0; linha < 3; linha++)
+        {
+            for (int coluna = 0; coluna < 3; coluna++)
+            {
+                if (tabuleiro[linha, coluna] == "   ")
+                {
+                    tabuleiro[linha, coluna] = $" {jogador} ";
+                    bool venceu = VerificarVencedor(jogador);
+                    tabuleiro[linha, coluna] = "   ";
+
+                    if (venceu)
+                    {
+                        linhaEscolhida = linha;
+                        colunaEscolhida = coluna;
+                        return true;
+                    }
+                }
+            }
+        }
+        linhaEscolhida = -1;
+        colunaEscolhida = -1;
+        return false;
     }
 
     static void Placar(int modoJogo)
