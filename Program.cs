@@ -1,4 +1,4 @@
-﻿class Program
+﻿﻿class Program
 {
     static string[,] tabuleiro = new string[3, 3]; // tabuleiro agora é global
 
