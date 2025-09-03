@@ -124,7 +124,12 @@
                     Console.Clear();
                     MostrarTabuleiro();
                     CentralizarTexto($"Jogador {jogadorAtual} venceu!");
-                    Console.ReadKey();
+                    // Removida espera com ReadKey para mostrar imediatamente as opções
+                    if (PerguntarContinuar())
+                    {
+                        InicializarTabuleiro(modoJogo);
+                        Jogarjxj(modoJogo);
+                    }
                     return;
                 }
 
@@ -135,6 +140,17 @@
                 CentralizarTexto("Posição já ocupada! Tente novamente.");
                 Console.ReadKey();
             }
+        }
+
+        // Se saiu do laço sem vencedor -> empate
+        Console.Clear();
+        MostrarTabuleiro();
+        CentralizarTexto("Deu velha! Empate.");
+        // Removida espera com ReadKey para mostrar imediatamente as opções
+        if (PerguntarContinuar())
+        {
+            InicializarTabuleiro(modoJogo);
+            Jogarjxj(modoJogo);
         }
     }
 
@@ -265,7 +281,12 @@
                     CentralizarTexto("Você venceu!");
                 else
                     CentralizarTexto("A máquina venceu!");
-                Console.ReadKey();
+                // Removida espera com ReadKey para mostrar imediatamente as opções
+                if (PerguntarContinuar())
+                {
+                    InicializarTabuleiro(modoJogo);
+                    Jogarjxm(modoJogo, dificuldade);
+                }
                 return;
             }
 
@@ -275,7 +296,12 @@
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
-        Console.ReadKey();
+        // Removida espera com ReadKey para mostrar imediatamente as opções
+        if (PerguntarContinuar())
+        {
+            InicializarTabuleiro(modoJogo);
+            Jogarjxm(modoJogo, dificuldade);
+        }
     }
 
     static bool TentarJogar(string jogador, out int linhaEscolhida, out int colunaEscolhida)
@@ -404,5 +430,27 @@
     static void MostrarRanking()
     {
         // Função ainda vazia
+    }
+
+    static bool PerguntarContinuar()
+    {
+        while (true)
+        {
+            Console.Clear();
+            CentralizarTexto("Você deseja continuar a partida ou voltar para o menu?");
+            CentralizarTexto("Opções: 1 - Continuar   2 - Voltar para o menu");
+            CentralizarTexto("Escolha uma opção: ");
+            string resposta = Console.ReadLine();
+
+            if (resposta == "1")
+                return true;
+            else if (resposta == "2")
+                return false;
+            else
+            {
+                CentralizarTexto("Opção inválida. Pressione qualquer tecla para tentar novamente.");
+                Console.ReadKey();
+            }
+        }
     }
 }
