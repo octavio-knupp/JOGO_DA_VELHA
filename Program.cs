@@ -1,9 +1,18 @@
-﻿﻿class Program
+﻿﻿using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
+class Program
 {
+    // Adicionado: Dicionário estático para o ranking
+    static Dictionary<string, int> ranking = new Dictionary<string, int>();
     static string[,] tabuleiro = new string[3, 3]; // tabuleiro agora é global
 
     static void Main()
     {
+        // Adicionado: Carrega o ranking ao iniciar o programa
+        //CarregarRanking();
         int opcaoMenu;
         int modoJogo;
 
@@ -38,7 +47,7 @@
                         CentralizarTexto("Iniciando modo: Jogador vs Jogador...");
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
-                        Jogarjxj(modoJogo);
+                        Jojarjxj(modoJogo);
                     }
                     else if (modoJogo == 2)
                     {
@@ -56,7 +65,7 @@
                         CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
-                        Jogarjxm(modoJogo, dificuldade);
+                        Jojarjxm(modoJogo, dificuldade);
                     }
                     else
                     {
@@ -94,7 +103,7 @@
         } while (opcaoMenu != 4);
     }
 
-    static void Jogarjxj(int modoJogo)
+    static void Jojarjxj(int modoJogo)
     {
         string jogadorAtual = "X";
         int tentativas = 0;
@@ -124,11 +133,12 @@
                     Console.Clear();
                     MostrarTabuleiro();
                     CentralizarTexto($"Jogador {jogadorAtual} venceu!");
-                    // Removida espera com ReadKey para mostrar imediatamente as opções
+                    // Adicionado: Atualiza a pontuação no ranking
+                    AtualizarPontuacao($"Jogador {jogadorAtual}");
                     if (PerguntarContinuar())
                     {
                         InicializarTabuleiro(modoJogo);
-                        Jogarjxj(modoJogo);
+                        Jojarjxj(modoJogo);
                     }
                     return;
                 }
@@ -146,17 +156,15 @@
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
-        // Removida espera com ReadKey para mostrar imediatamente as opções
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
-            Jogarjxj(modoJogo);
+            Jojarjxj(modoJogo);
         }
     }
 
-    static void Jogarjxm(int modoJogo, int dificuldade)
+    static void Jojarjxm(int modoJogo, int dificuldade)
     {
-        // Jogador homo Sapiens
         string jogadorAtual = "X";
         int tentativas = 0;
         Random rnd = new Random();
@@ -172,7 +180,6 @@
 
             if (jogadorAtual == "X")
             {
-                // Jogador homo
                 CentralizarTexto("Sua vez (Jogador X)");
                 CentralizarTexto("Digite a linha (1-3): ");
                 int linha = int.Parse(Console.ReadLine()) - 1;
@@ -194,11 +201,9 @@
             }
             else
             {
-                // Jogada da máquina
                 CentralizarTexto("Vez da Máquina (O)");
                 int linha, coluna;
 
-                // FÁCIL
                 if (dificuldade == 1)
                 {
                     do
@@ -207,10 +212,8 @@
                         coluna = rnd.Next(0, 3);
                     } while (tabuleiro[linha, coluna] != "   ");
                 }
-                // MÉDIO
                 else if (dificuldade == 2)
                 {
-                    // tenta ganhar
                     if (!TentarJogar("O", out linha, out coluna))
                     {
                         do
@@ -220,29 +223,22 @@
                         } while (tabuleiro[linha, coluna] != "   ");
                     }
                 }
-
-
-                // DIFÍCIL
                 else
                 {
-                    // tenta ganhar
                     if (!TentarJogar("O", out linha, out coluna))
                     {
-                        // tenta bloquear
                         if (!TentarJogar("X", out linha, out coluna))
                         {
-                            // Senão, pega centro ou canto
                             if (tabuleiro[1, 1] == "   ")
                             {
                                 linha = 1; coluna = 1;
                             }
                             else
                             {
-                                // FIX: usar new int[,] e laço for para matriz 2D
-                                int[,] cantos = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } }; // FIX
+                                int[,] cantos = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
                                 bool jogou = false;
 
-                                for (int i = 0; i < cantos.GetLength(0); i++) // FIX
+                                for (int i = 0; i < cantos.GetLength(0); i++)
                                 {
                                     int lc = cantos[i, 0];
                                     int cc = cantos[i, 1];
@@ -272,20 +268,26 @@
                 tentativas++;
             }
 
-            // Verifica vencedor
             if (VerificarVencedor(jogadorAtual))
             {
                 Console.Clear();
                 MostrarTabuleiro();
                 if (jogadorAtual == "X")
+                {
                     CentralizarTexto("Você venceu!");
+                    // Adicionado: Atualiza a pontuação no ranking
+                    AtualizarPontuacao("Jogador X");
+                }
                 else
+                {
                     CentralizarTexto("A máquina venceu!");
-                // Removida espera com ReadKey para mostrar imediatamente as opções
+                    // Adicionado: Atualiza a pontuação no ranking
+                    AtualizarPontuacao("Máquina");
+                }
                 if (PerguntarContinuar())
                 {
                     InicializarTabuleiro(modoJogo);
-                    Jogarjxm(modoJogo, dificuldade);
+                    Jojarjxm(modoJogo, dificuldade);
                 }
                 return;
             }
@@ -296,11 +298,10 @@
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
-        // Removida espera com ReadKey para mostrar imediatamente as opções
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
-            Jogarjxm(modoJogo, dificuldade);
+            Jojarjxm(modoJogo, dificuldade);
         }
     }
 
@@ -332,20 +333,20 @@
 
     static void Placar(int modoJogo)
     {
-        int vitoriaJogador1 = 0;
-        int vitoriaJogador2 = 0;
-        int vitoriaMaquina = 0;
+        // Acessa o dicionário e usa 0 como valor padrão se a chave não existir
+        int vitoriasJ1 = ranking.ContainsKey("Jogador X") ? ranking["Jogador X"] : 0;
+        int vitoriasJ2 = ranking.ContainsKey("Jogador O") ? ranking["Jogador O"] : 0;
+        int vitoriasMaquina = ranking.ContainsKey("Máquina") ? ranking["Máquina"] : 0;
 
         if (modoJogo == 1)
         {
-            CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Jogador 2: {vitoriaJogador2}");
-            Console.WriteLine();
+            CentralizarTexto($"Placar: Jogador X: {vitoriasJ1} | Jogador O: {vitoriasJ2}");
         }
         else if (modoJogo == 2)
         {
-            CentralizarTexto($"Placar: Jogador 1: {vitoriaJogador1} | Máquina: {vitoriaMaquina}");
-            Console.WriteLine();
+            CentralizarTexto($"Placar: Jogador X: {vitoriasJ1} | Máquina: {vitoriasMaquina}");
         }
+        Console.WriteLine();
     }
 
     static void InicializarTabuleiro(int modoJogo)
@@ -427,9 +428,28 @@
         return false;
     }
 
+    // Adicionado: Implementa a exibição do ranking
     static void MostrarRanking()
     {
-        // Função ainda vazia
+        Console.Clear();
+        CentralizarTexto("=== RANKING ===");
+        CentralizarTexto("-------------------");
+        if (ranking.Count == 0) // verifica se o dicionário de ranking está vazio 
+        {
+            CentralizarTexto("Nenhum jogador no ranking ainda.");
+        }
+        else
+        {
+            // Ordena o dicionário pelo número de vitórias (do maior para o menor)
+            var rankingOrdenado = ranking.OrderByDescending(p => p.Value);
+            int i = 1;
+            foreach (var player in rankingOrdenado)
+            {
+                CentralizarTexto($"{i}. {player.Key} - Vitórias: {player.Value}");
+                i++;
+            }
+        }
+        CentralizarTexto("-------------------");
     }
 
     static bool PerguntarContinuar()
@@ -440,7 +460,7 @@
             CentralizarTexto("Você deseja continuar a partida ou voltar para o menu?");
             CentralizarTexto("Opções: 1 - Continuar   2 - Voltar para o menu");
             CentralizarTexto("Escolha uma opção: ");
-            string resposta = Console.ReadLine();
+            string resposta = Console.ReadLine() ?? "";
 
             if (resposta == "1")
                 return true;
@@ -452,5 +472,45 @@
                 Console.ReadKey();
             }
         }
+    }
+
+    // Adicionado: Novo método para carregar o ranking do arquivo
+    static void CarregarRanking()
+    {
+        const string ARQUIVO = "ranking.txt";
+        if (File.Exists(ARQUIVO))
+        {
+            var linhas = File.ReadAllLines(ARQUIVO);
+            foreach (var linha in linhas)
+            {
+                var partes = linha.Split(',');
+                if (partes.Length == 2 && int.TryParse(partes[1], out int vitorias))
+                {
+                    ranking[partes[0]] = vitorias;
+                }
+            }
+        }
+    }
+
+    // Adicionado: Novo método para salvar o ranking no arquivo
+    static void SalvarRanking()
+    {
+        const string ARQUIVO = "ranking.txt";
+        var linhas = ranking.Select(p => $"{p.Key},{p.Value}").ToArray();
+        File.WriteAllLines(ARQUIVO, linhas);
+    }
+
+    // Adicionado: Novo método para atualizar a pontuação
+    static void AtualizarPontuacao(string nomeJogador)
+    {
+        if (ranking.ContainsKey(nomeJogador))
+        {
+            ranking[nomeJogador]++;
+        }
+        else
+        {
+            ranking[nomeJogador] = 1;
+        }
+        SalvarRanking();
     }
 }
