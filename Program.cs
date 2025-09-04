@@ -11,7 +11,7 @@ class Program
 
     static void Main()
     {
-        // Adicionado: Carrega o ranking ao iniciar o programa
+        // Adicionado: Carrega o ranking ao iniciar o programa (comentado, mas pronto para uso)
         //CarregarRanking();
         int opcaoMenu;
         int modoJogo;
@@ -20,12 +20,12 @@ class Program
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            CentralizarTexto("=== JOGO DA VELHA ===");
+            CentralizarTexto("=== JOGO DA VELHA ===\n");
             CentralizarTexto("1 - Jogar");
             CentralizarTexto("2 - Instruções");
             CentralizarTexto("3 - Ranking");
             CentralizarTexto("4 - Sair");
-            CentralizarTexto("Escolha uma opção: ");
+            CentralizarTexto("Escolha uma opção:");
 
             if (!int.TryParse(Console.ReadLine(), out opcaoMenu))
                 opcaoMenu = 0;
@@ -34,42 +34,56 @@ class Program
             {
                 case 1:
                     Console.Clear();
-                    CentralizarTexto("Escolha o modo de jogo:");
-                    CentralizarTexto("1 - Jogador vs Jogador");
-                    CentralizarTexto("2 - Jogador vs Máquina");
-                    CentralizarTexto("Digite sua escolha: ");
+                    int modoJogoValido = 0;
+                    // Loop até o usuário digitar um modo válido (1 ou 2)
+                    do
+                    {
+                        CentralizarTexto("Escolha o modo de jogo:\n");
+                        CentralizarTexto("1 - Jogador vs Jogador");
+                        CentralizarTexto("2 - Jogador vs Máquina");
+                        CentralizarTexto("Digite sua escolha: ");
 
-                    if (!int.TryParse(Console.ReadLine(), out modoJogo))
-                        modoJogo = 0;
+                        string entradaModo = Console.ReadLine();
+                        // Verifica se a entrada é válida (1 ou 2)
+                        if (!int.TryParse(entradaModo, out modoJogoValido) || (modoJogoValido != 1 && modoJogoValido != 2))
+                        {
+                            CentralizarTexto("Modo inválido, tente novamente.");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                    } while (modoJogoValido != 1 && modoJogoValido != 2);
+
+                    modoJogo = modoJogoValido;
 
                     if (modoJogo == 1)
                     {
-                        CentralizarTexto("Iniciando modo: Jogador vs Jogador...");
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
                         Jojarjxj(modoJogo);
                     }
                     else if (modoJogo == 2)
                     {
-                        CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
-                        Console.Clear();
-                        CentralizarTexto("Escolha a dificuldade");
-                        CentralizarTexto("1 - Fácil");
-                        CentralizarTexto("2 - Médio");
-                        CentralizarTexto("3 - Difícil");
-                        CentralizarTexto("Digite sua escolha");
-                        int dificuldade;
-                        if (!int.TryParse(Console.ReadLine(), out dificuldade))
-                            dificuldade = 1;
+                        int dificuldadeValida = 0;
+                        // Loop até o usuário digitar uma dificuldade válida (1, 2 ou 3)
+                        do
+                        {
+                            Console.Clear();
+                            CentralizarTexto("Escolha a dificuldade:\n");
+                            CentralizarTexto("1 - Fácil");
+                            CentralizarTexto("2 - Médio");
+                            CentralizarTexto("3 - Difícil");
+                            CentralizarTexto("Digite sua escolha:");
+                            string entradaDif = Console.ReadLine();
+                            if (!int.TryParse(entradaDif, out dificuldadeValida) || dificuldadeValida < 1 || dificuldadeValida > 3)
+                            {
+                                CentralizarTexto("Dificuldade inválida, tente novamente.");
+                                Console.ReadKey();
+                            }
+                        } while (dificuldadeValida < 1 || dificuldadeValida > 3);
 
-                        CentralizarTexto("Iniciando modo: Jogador vs Máquina...");
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
-                        Jojarjxm(modoJogo, dificuldade);
-                    }
-                    else
-                    {
-                        CentralizarTexto("Modo inválido!");
+                        Jojarjxm(modoJogo, dificuldadeValida);
                     }
 
                     Console.ReadKey();
@@ -77,9 +91,9 @@ class Program
 
                 case 2:
                     Console.Clear();
-                    CentralizarTexto("=== INSTRUÇÕES ===");
+                    CentralizarTexto("=== INSTRUÇÕES ===\n");
                     CentralizarTexto("- Dois jogadores alternam jogadas.");
-                    CentralizarTexto("- Vence quem fizer 3 em linha (horizontal, vertical ou diagonal).");
+                    CentralizarTexto("- Vence quem fazer 3 em linha (horizontal, vertical ou diagonal).");
                     CentralizarTexto("- No modo Máquina, o computador fará jogadas automáticas.");
                     Console.ReadKey();
                     break;
@@ -135,6 +149,7 @@ class Program
                     CentralizarTexto($"Jogador {jogadorAtual} venceu!");
                     // Adicionado: Atualiza a pontuação no ranking
                     AtualizarPontuacao($"Jogador {jogadorAtual}");
+                    // Alterado: Pergunta se deseja continuar ou voltar ao menu, sem limpar a tela
                     if (PerguntarContinuar())
                     {
                         InicializarTabuleiro(modoJogo);
@@ -156,6 +171,7 @@ class Program
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
+        // Alterado: Pergunta se deseja continuar ou voltar ao menu, sem limpar a tela
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
@@ -284,6 +300,7 @@ class Program
                     // Adicionado: Atualiza a pontuação no ranking
                     AtualizarPontuacao("Máquina");
                 }
+                // Alterado: Pergunta se deseja continuar ou voltar ao menu, sem limpar a tela
                 if (PerguntarContinuar())
                 {
                     InicializarTabuleiro(modoJogo);
@@ -298,6 +315,7 @@ class Program
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
+        // Alterado: Pergunta se deseja continuar ou voltar ao menu, sem limpar a tela
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
@@ -456,16 +474,22 @@ class Program
     {
         while (true)
         {
-            Console.Clear();
+            // Alterado: Não limpar a tela para manter a mensagem de vitória/empate visível
+            CentralizarTexto("");
             CentralizarTexto("Você deseja continuar a partida ou voltar para o menu?");
             CentralizarTexto("Opções: 1 - Continuar   2 - Voltar para o menu");
             CentralizarTexto("Escolha uma opção: ");
-            string resposta = Console.ReadLine() ?? "";
+            string resposta = Console.ReadLine();
 
             if (resposta == "1")
                 return true;
             else if (resposta == "2")
                 return false;
+            else if (string.IsNullOrEmpty(resposta))
+            {
+                CentralizarTexto("Você não digitou nada. Pressione qualquer tecla para tentar novamente.");
+                Console.ReadKey();
+            }
             else
             {
                 CentralizarTexto("Opção inválida. Pressione qualquer tecla para tentar novamente.");
