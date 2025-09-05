@@ -383,9 +383,11 @@ class Program
 
     static void MostrarTabuleiro()
     {
+        CentralizarTexto(" 1    2    3");
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
-            string linhaTabuleiro = "";
+           
+            string linhaTabuleiro = $"{linha + 1}";
             for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
             {
                 linhaTabuleiro += tabuleiro[linha, coluna];
@@ -394,7 +396,7 @@ class Program
             CentralizarTexto(linhaTabuleiro);
 
             if (linha < 2)
-                CentralizarTexto("---+---+---");
+                CentralizarTexto(" ---+---+---");
         }
     }
 
