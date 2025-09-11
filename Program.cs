@@ -383,22 +383,60 @@ class Program
 
     static void MostrarTabuleiro()
     {
-        CentralizarTexto(" 1    2    3");
+        // Define a cor padrão para a interface
+        ConsoleColor corPadrao = ConsoleColor.DarkCyan;
+        Console.ForegroundColor = corPadrao;
+
+        // Alinha o cabeçalho. A largura total (13) deve corresponder à linha do tabuleiro.
+        CentralizarTexto("  1   2   3");
+
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
-           
-            string linhaTabuleiro = $"{linha + 1}";
+            // A string de cálculo deve ter a mesma estrutura da linha que será impressa
+            string linhaParaCalculo = $"{linha + 1} {tabuleiro[linha, 0]}|{tabuleiro[linha, 1]}|{tabuleiro[linha, 2]}";
+            int larguraConsole = Console.WindowWidth;
+            int padding = Math.Max(0, (larguraConsole - linhaParaCalculo.Length) / 2);
+
+            // Aplica o espaçamento para centralizar
+            Console.Write(new string(' ', padding));
+
+            // Escreve o número da linha e o espaço necessário para o alinhamento
+            Console.Write($"{linha + 1} ");
+
+            // Itera sobre as colunas para desenhar o tabuleiro com cores
             for (int coluna = 0; coluna < tabuleiro.GetLength(1); coluna++)
             {
-                linhaTabuleiro += tabuleiro[linha, coluna];
-                if (coluna < 2) linhaTabuleiro += "|";
-            }
-            CentralizarTexto(linhaTabuleiro);
+                string peca = tabuleiro[linha, coluna];
 
+                // Verifica a peça e define a cor correspondente
+                if (peca.Contains("X"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Green; // Cor para o Jogador X
+                }
+                else if (peca.Contains("O"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow; // Cor para o Jogador O
+                }
+
+                Console.Write(peca); // Escreve a peça (ex: " X ")
+                Console.ForegroundColor = corPadrao; // Retorna para a cor padrão
+
+                // Desenha o separador vertical
+                if (coluna < 2)
+                {
+                    Console.Write("|");
+                }
+            }
+            Console.WriteLine(); // Pula para a próxima linha
+
+            // Alinha o separador. A largura total (13) deve corresponder à linha do tabuleiro.
             if (linha < 2)
-                CentralizarTexto(" ---+---+---");
+            {
+                CentralizarTexto("  ---+---+---");
+            }
         }
     }
+
 
     static void CentralizarTexto(string texto)
     {
