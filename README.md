@@ -2,7 +2,6 @@
 Este repositório contém um trabalho desenvolvido em grupo para a faculdade, cujo objetivo foi criar um Jogo da Velha em C#.<br>
 
 <h3>O projeto aplica conceitos de lógica de programação e estruturas de controle, com funcionalidades como:<br></h3>
-  
 <ul>
   <li>Menu interativo</li>
   <li>Modos de jogo (Jogador vs Jogador e Jogador vs Máquina com dificuldades)</li>
