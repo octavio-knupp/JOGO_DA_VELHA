@@ -1,4 +1,6 @@
 # JOGO_DA_VELHA
-Trabalho da faculdade onde temos que criar um jogo da velha utilizando C++, C ou C# <br>
-Este projeto foi desenvolvido em grupo para a faculdade e consiste em um Jogo da Velha feito em C#.<br>
-O objetivo foi aplicar conceitos de programação estruturada, lógica de jogo e organização de código.
+Este repositório contém um trabalho desenvolvido em grupo para a faculdade, cujo objetivo foi criar um Jogo da Velha em C#.<br>
+O projeto aplica conceitos de lógica de programação e estruturas de controle, com funcionalidades como:<br>
+Menu interativo<br>
+Modos de jogo (Jogador vs Jogador e Jogador vs Máquina com dificuldades)<br>
+Ranking de vitórias temporário
