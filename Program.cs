@@ -32,7 +32,11 @@ class Program
             CentralizarTexto("2 - Instruções");
             CentralizarTexto("3 - Ranking");
             CentralizarTexto("4 - Sair");
-            CentralizarTexto("Escolha uma opção:");
+            CentralizarTexto("Escolha uma opção:\n \n");
+            CentralizarTexto("Integrantes:\n");
+            CentralizarTexto("Octavio Henrique Knupp Lucio");
+            CentralizarTexto("Nícolas Joly Mussi");
+            CentralizarTexto("Carlos Daniel Pinheiro de Souza");
 
             // Lê a opção do menu e trata entradas inválidas
             if (!int.TryParse(Console.ReadLine(), out opcaoMenu))
@@ -156,7 +160,7 @@ class Program
     static void Jojarjxj(int modoJogo)
     {
         // "X" sempre começa jogando.
-        string jogadorAtual = "X";
+        string jogadorAtual = "X"; 
 
         // Contador de tentativas (máximo 9 jogadas).
         int tentativas = 0;
@@ -643,7 +647,7 @@ class Program
         CentralizarTexto("-------------------");
 
         // Verifica se o ranking está vazio
-        if (ranking.Count == 0) 
+        if (ranking.Count == 0)
         {
             CentralizarTexto("Nenhum jogador no ranking ainda.");
         }
