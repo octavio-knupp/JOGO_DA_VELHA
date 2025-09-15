@@ -160,7 +160,7 @@ class Program
     static void Jojarjxj(int modoJogo)
     {
         // "X" sempre começa jogando.
-        string jogadorAtual = "X"; 
+        string jogadorAtual = "X";
 
         // Contador de tentativas (máximo 9 jogadas).
         int tentativas = 0;
@@ -324,14 +324,15 @@ class Program
                     if (!TentarJogar("O", out linha, out coluna))
                     {
                         // Se não puder vencer, tenta bloquear o jogador
-                        do
+                        if (!TentarJogar("X", out linha, out coluna))
                         {
-                            linha = rnd.Next(0, 3);
-                            coluna = rnd.Next(0, 3);
+                             do
+                             {
+                                 linha = rnd.Next(0, 3);
+                                 coluna = rnd.Next(0, 3);
+                             }
+                             while (tabuleiro[linha, coluna] != "   ");
                         }
-
-                        // Repete até encontrar uma posição vazia
-                        while (tabuleiro[linha, coluna] != "   ");
                     }
                 }
 
@@ -347,7 +348,8 @@ class Program
                             // Estratégia: se o centro estiver livre, joga lá
                             if (tabuleiro[1, 1] == "   ")
                             {
-                                linha = 1; coluna = 1;
+                                linha = 1;
+                                coluna = 1;
                             }
                             // Se o centro estiver ocupado, tenta jogar em um canto
                             else
@@ -675,7 +677,7 @@ class Program
         {
             CentralizarTexto("");
             CentralizarTexto("Você deseja continuar a partida ou voltar para o menu?");
-            CentralizarTexto("Opções: 1 - Continuar   2 - Voltar para o menu");
+            CentralizarTexto("Opções: 1 - Continuar    2 - Voltar para o menu");
             CentralizarTexto("Escolha uma opção: ");
             // Lê a resposta do jogador
             string resposta = Console.ReadLine();
