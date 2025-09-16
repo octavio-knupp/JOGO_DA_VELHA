@@ -176,10 +176,16 @@ class Program
             Placar(modoJogo);
             MostrarTabuleiro();
 
+            // Solicita a jogada do jogador atual.
             CentralizarTexto($"Vez do jogador {jogadorAtual}");
             CentralizarTexto("Digite a linha (1-3): ");
 
             // Lê a linha e coluna escolhidas pelo jogador (ajustando para índice 0)
+            // Exemplo: se o jogador digitar 1, será convertido para 0 (índice da matriz)
+            // Isso é feito subtraindo 1 do valor digitado.
+            // Assim, as entradas do jogador (1, 2, 3) correspondem aos índices (0, 1, 2) da matriz.
+            // Exemplo: Jogador digita linha 2 e coluna 3 -> tabuleiro[1, 2]
+            // Isso facilita o entendimento para o jogador, que vê o tabuleiro numerado de 1 a 3.
             int linha = int.Parse(Console.ReadLine()) - 1;
 
             CentralizarTexto("Digite a coluna (1-3): ");
@@ -187,6 +193,7 @@ class Program
 
 
             // Verifica se a posição está vazia antes de fazer a jogada.
+            // Se estiver vazia, faz a jogada.
             if (tabuleiro[linha, coluna] == "   ")
             {
 
@@ -299,6 +306,9 @@ class Program
 
             // Se for a vez da máquina (O).
             // A máquina joga conforme a dificuldade escolhida.
+            // Dificuldade 1: Jogadas aleatórias.
+            // Dificuldade 2: Tenta vencer ou bloquear o jogador.
+            // Dificuldade 3: Estratégia avançada.
             else
             {
                 CentralizarTexto("Vez da Máquina (O)");
@@ -326,12 +336,12 @@ class Program
                         // Se não puder vencer, tenta bloquear o jogador
                         if (!TentarJogar("X", out linha, out coluna))
                         {
-                             do
-                             {
-                                 linha = rnd.Next(0, 3);
-                                 coluna = rnd.Next(0, 3);
-                             }
-                             while (tabuleiro[linha, coluna] != "   ");
+                            do
+                            {
+                                linha = rnd.Next(0, 3);
+                                coluna = rnd.Next(0, 3);
+                            }
+                            while (tabuleiro[linha, coluna] != "   ");
                         }
                     }
                 }
@@ -400,6 +410,8 @@ class Program
             }
 
             // Verifica se o jogador atual venceu após a jogada.
+            // Se houver um vencedor, exibe a mensagem e atualiza o ranking.
+            // Sai do método para voltar ao menu principal.
             if (VerificarVencedor(jogadorAtual))
             {
                 Console.Clear();
@@ -427,6 +439,7 @@ class Program
                     InicializarTabuleiro(modoJogo);
                     Jojarjxm(modoJogo, dificuldade);
                 }
+                // Sai do método para voltar ao menu principal.
                 return;
             }
 
@@ -434,6 +447,7 @@ class Program
             jogadorAtual = (jogadorAtual == "X") ? "O" : "X";
         }
 
+        // Se saiu do laço sem vencedor -> empate
         Console.Clear();
         MostrarTabuleiro();
         CentralizarTexto("Deu velha! Empate.");
@@ -508,6 +522,7 @@ class Program
         Placar(modoJogo);
 
         // Preenche o tabuleiro com espaços vazios.
+        //Por que ele faz isso? Porque o tabuleiro é uma matriz 3x3 e cada posição deve começar vazia.
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
             // Percorre cada coluna da linha atual
@@ -529,6 +544,7 @@ class Program
         CentralizarTexto("  1   2   3");
 
         // Itera sobre as linhas do tabuleiro
+        // Cada linha do tabuleiro é desenhada com o número da linha à esquerda
         for (int linha = 0; linha < tabuleiro.GetLength(0); linha++)
         {
             // Calcula o espaçamento necessário para centralizar a linha
@@ -637,7 +653,7 @@ class Program
         {
             return true;
         }
-
+        // Se nenhuma condição de vitória for atendida, retorna false
         return false;
     }
 
@@ -683,18 +699,19 @@ class Program
             string resposta = Console.ReadLine();
 
             // Processa a resposta do jogador
+            // Retorna true para continuar, false para voltar ao menu
             if (resposta == "1")
                 return true;
             else if (resposta == "2")
                 return false;
             else if (string.IsNullOrEmpty(resposta))
             {
-                CentralizarTexto("Você não digitou nada. Pressione qualquer tecla para tentar novamente.");
+                CentralizarTexto("Você não digitou nada. Pressione a tecla Enter para tentar novamente.");
                 Console.ReadKey();
             }
             else
             {
-                CentralizarTexto("Opção inválida. Pressione qualquer tecla para tentar novamente.");
+                CentralizarTexto("Opção inválida. Pressione atecla Enter para tentar novamente.");
                 Console.ReadKey();
             }
         }
@@ -711,16 +728,15 @@ class Program
         File.WriteAllLines(ARQUIVO, linhas);
     }
 
-    // static void CarregarRanking()
     static void AtualizarPontuacao(string nomeJogador)
     {
-        // Carrega o ranking de um arquivo de texto.
+            // Atualiza a pontuação do jogador no ranking.
         if (ranking.ContainsKey(nomeJogador))
         {
-            // Se o jogador já existir no ranking, incrementa a pontuação.
+            // Incrementa a pontuação existente
             ranking[nomeJogador]++;
         }
-        // Se o jogador não existir no ranking, adiciona com 1 vitória.
+        // Se o jogador não existir no ranking, adiciona com pontuação 1
         else
         {
             ranking[nomeJogador] = 1;
