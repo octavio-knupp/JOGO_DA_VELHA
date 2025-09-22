@@ -82,7 +82,7 @@ class Program
                     {
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
-                        Jojarjxj(modoJogo);
+                        Jogarjxj(modoJogo);
                     }
 
                     // Se o modo escolhido for Jogador vs Máquina, pede para escolher a dificuldade.
@@ -117,7 +117,7 @@ class Program
 
                         Placar(modoJogo);
                         InicializarTabuleiro(modoJogo);
-                        Jojarjxm(modoJogo, dificuldadeValida); // inicia o jogo no modo jogador vs maquina.
+                        Jogarjxm(modoJogo, dificuldadeValida); // inicia o jogo no modo jogador vs maquina.
                     }
 
                     // Pausa para o usuário ver o resultado antes de voltar ao menu
@@ -157,7 +157,7 @@ class Program
     }
 
     // Metodo para jogar entre dois jogadores.
-    static void Jojarjxj(int modoJogo)
+    static void Jogarjxj(int modoJogo)
     {
         // "X" sempre começa jogando.
         string jogadorAtual = "X";
@@ -218,7 +218,7 @@ class Program
                     if (PerguntarContinuar())
                     {
                         InicializarTabuleiro(modoJogo);
-                        Jojarjxj(modoJogo);
+                        Jogarjxj(modoJogo);
                     }
                     return;
                 }
@@ -244,13 +244,13 @@ class Program
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
-            Jojarjxj(modoJogo);
+            Jogarjxj(modoJogo);
         }
     }
 
     // Metodo para jogar contra a maquina.
     // A maquina pode jogar em 3 niveis de dificuldade.
-    static void Jojarjxm(int modoJogo, int dificuldade)
+    static void Jogarjxm(int modoJogo, int dificuldade)
     {
 
         // "X" sempre começa jogando.
@@ -437,7 +437,7 @@ class Program
                 if (PerguntarContinuar())
                 {
                     InicializarTabuleiro(modoJogo);
-                    Jojarjxm(modoJogo, dificuldade);
+                    Jogarjxm(modoJogo, dificuldade);
                 }
                 // Sai do método para voltar ao menu principal.
                 return;
@@ -456,7 +456,7 @@ class Program
         if (PerguntarContinuar())
         {
             InicializarTabuleiro(modoJogo);
-            Jojarjxm(modoJogo, dificuldade);
+            Jogarjxm(modoJogo, dificuldade);
         }
     }
 
@@ -730,7 +730,7 @@ class Program
 
     static void AtualizarPontuacao(string nomeJogador)
     {
-            // Atualiza a pontuação do jogador no ranking.
+        // Atualiza a pontuação do jogador no ranking.
         if (ranking.ContainsKey(nomeJogador))
         {
             // Incrementa a pontuação existente
