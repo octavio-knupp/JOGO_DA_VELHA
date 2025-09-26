@@ -1,6 +1,7 @@
 ﻿﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 class Program
 {
@@ -178,22 +179,44 @@ class Program
 
             // Solicita a jogada do jogador atual.
             CentralizarTexto($"Vez do jogador {jogadorAtual}");
-            CentralizarTexto("Digite a linha (1-3): ");
 
-            // Lê a linha e coluna escolhidas pelo jogador (ajustando para índice 0)
-            // Exemplo: se o jogador digitar 1, será convertido para 0 (índice da matriz)
-            // Isso é feito subtraindo 1 do valor digitado.
-            // Assim, as entradas do jogador (1, 2, 3) correspondem aos índices (0, 1, 2) da matriz.
-            // Exemplo: Jogador digita linha 2 e coluna 3 -> tabuleiro[1, 2]
-            // Isso facilita o entendimento para o jogador, que vê o tabuleiro numerado de 1 a 3.
-            int linha = int.Parse(Console.ReadLine()) - 1;
+            // Entrada de linha com TryParse
+            int linha;
+            while (true)
+            {
+                CentralizarTexto("Digite a linha (1-3): ");
+                string entradaLinha = Console.ReadLine();
+                if (int.TryParse(entradaLinha, out linha) && linha >= 1 && linha <= 3)
+                {
+                    linha -= 1;
+                    break;
+                }
+                else
+                {
+                    CentralizarTexto("Entrada inválida! Digite um número de 1 a 3.");
+                    Console.ReadKey();
+                }
+            }
 
-            CentralizarTexto("Digite a coluna (1-3): ");
-            int coluna = int.Parse(Console.ReadLine()) - 1;
-
+            // Entrada de coluna com TryParse
+            int coluna;
+            while (true)
+            {
+                CentralizarTexto("Digite a coluna (1-3): ");
+                string entradaColuna = Console.ReadLine();
+                if (int.TryParse(entradaColuna, out coluna) && coluna >= 1 && coluna <= 3)
+                {
+                    coluna -= 1;
+                    break;
+                }
+                else
+                {
+                    CentralizarTexto("Entrada inválida! Digite um número de 1 a 3.");
+                    Console.ReadKey();
+                }
+            }
 
             // Verifica se a posição está vazia antes de fazer a jogada.
-            // Se estiver vazia, faz a jogada.
             if (tabuleiro[linha, coluna] == "   ")
             {
 
@@ -278,14 +301,42 @@ class Program
             if (jogadorAtual == "X")
             {
                 CentralizarTexto("Sua vez (Jogador X)");
-                CentralizarTexto("Digite a linha (1-3): ");
 
-                // Lê a linha e coluna escolhidas pelo jogador (ajustando para índice 0)
-                int linha = int.Parse(Console.ReadLine()) - 1;
+                // Entrada da linha com TryParse
+                int linha;
+                while (true)
+                {
+                    CentralizarTexto("Digite a linha (1-3): ");
+                    string entradaLinha = Console.ReadLine();
+                    if (int.TryParse(entradaLinha, out linha) && linha >= 1 && linha <= 3)
+                    {
+                        linha -= 1;
+                        break;
+                    }
+                    else
+                    {
+                        CentralizarTexto("Entrada inválida! Digite um número de 1 a 3.");
+                        Console.ReadKey();
+                    }
+                }
 
-                CentralizarTexto("Digite a coluna (1-3): ");
-                int coluna = int.Parse(Console.ReadLine()) - 1;
-
+                // Entrada da coluna com TryParse
+                int coluna;
+                while (true)
+                {
+                    CentralizarTexto("Digite a coluna (1-3): ");
+                    string entradaColuna = Console.ReadLine();
+                    if (int.TryParse(entradaColuna, out coluna) && coluna >= 1 && coluna <= 3)
+                    {
+                        coluna -= 1;
+                        break;
+                    }
+                    else
+                    {
+                        CentralizarTexto("Entrada inválida! Digite um número de 1 a 3.");
+                        Console.ReadKey();
+                    }
+                }
 
                 // Verifica se a posição está vazia antes de fazer a jogada.
                 if (tabuleiro[linha, coluna] == "   ")
